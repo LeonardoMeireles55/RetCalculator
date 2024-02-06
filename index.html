@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Reticulócitos</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen w-screen">
+
+  <div class="container mx-auto p-4 bg-white rounded shadow-md md:w-1/2 md:h-2/3 h-screen p-8">
+
+    <h2 class="text-2xl font-semibold mb-4">Calculadora de Reticulócitos</h2>
+
+    <form id="reticulocyteForm" oninput="calcularReticulocitos()" class="mb-4">
+      <div class="mb-2">
+        <label for="hemaciasTotais" class="block text-sm font-medium text-gray-600">Hemácias Totais (10e6):</label>
+        <input type="number" id="hemaciasTotais" class="mt-1 p-2 border rounded w-full" value="5.25" required>
+      </div>
+
+      <div class="mb-2">
+        <label for="reticulocitos1000" class="block text-sm font-medium text-gray-600">Reticulócitos em 10 campos (1000 Hemácias):</label>
+        <input type="number" id="reticulocitos1000" class="mt-1 p-2 border rounded w-full" value="25" oninput="calcularPercentReticulocito()" required>
+      </div>
+
+      <div class="mb-2">
+        <label for="percentReticulocito" class="block text-sm font-medium text-gray-600">Porcentagem de Reticulócitos (%):</label>
+        <input type="number" id="percentReticulocito" class="mt-1 p-2 border rounded w-full" value="2.5" required>
+      </div>
+
+      <button type="button" onclick="calcularReticulocitos()" class="bg-green-500 text-white py-2 px-4 rounded cursor-pointer">Calcular</button>
+    </form>
+
+    <div id="resultado" class="bg-white p-2">
+        <h3 class='text-lg font-semibold mb-2'>Resultado:</h3>
+    </div>
+  </div>
+</body>
+<script src="script.js"></script>
+</html>
