@@ -3,38 +3,93 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora de Reticulócitos</title>
+  <title>Reticulocyte Calculator</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 flex items-center justify-center h-screen w-screen">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen py-6">
 
-  <div class="container mx-auto p-4 bg-white rounded shadow-md md:w-1/2 md:h-2/3 h-screen p-8">
+  <div class="container mx-auto p-6 bg-white rounded-lg shadow-lg max-w-md">
+    <h1 class="text-3xl font-bold mb-6 text-center text-blue-600">Reticulocyte Calculator</h1>
 
-    <h2 class="text-2xl font-semibold mb-4">Calculadora de Reticulócitos</h2>
-
-    <form id="reticulocyteForm" oninput="calcularReticulocitos()" class="mb-4">
-      <div class="mb-2">
-        <label for="hemaciasTotais" class="block text-sm font-medium text-gray-600">Hemácias Totais (10e9):</label>
-        <input type="number" id="hemaciasTotais" class="mt-1 p-2 border rounded w-full" value="5.25" required>
+    <form id="reticulocyteForm" class="space-y-4">
+      <div class="mb-4">
+        <label for="patientType" class="block text-sm font-medium text-gray-700">Patient Type:</label>
+        <div class="mt-1 relative rounded-md shadow-sm">
+          <select id="patientType" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <option value="newborn">Newborn</option>
+            <option value="adultMale" selected>Adult Male</option>
+            <option value="adultFemale">Adult Female</option>
+          </select>
+        </div>
       </div>
 
-      <div class="mb-2">
-        <label for="reticulocitos1000" class="block text-sm font-medium text-gray-600">Reticulócitos em 10 campos (1000 Hemácias):</label>
-        <input type="number" id="reticulocitos1000" class="mt-1 p-2 border rounded w-full" value="25" oninput="calcularPercentReticulocito()" required>
+      <div class="mb-4">
+        <label for="totalRBC" class="block text-sm font-medium text-gray-700">Total Red Blood Cells (10<sup>12</sup>/L):</label>
+        <div class="mt-1 relative rounded-md shadow-sm">
+          <input type="number" step="0.01" id="totalRBC" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+        </div>
       </div>
 
-      <div class="mb-2">
-        <label for="percentReticulocito" class="block text-sm font-medium text-gray-600">Porcentagem de Reticulócitos (%):</label>
-        <input type="number" id="percentReticulocito" class="mt-1 p-2 border rounded w-full" value="2.5" required>
+      <div class="mb-4">
+        <label for="reticulocytes1000" class="block text-sm font-medium text-gray-700">Reticulocytes in 10 fields (1000 RBCs):</label>
+        <div class="mt-1 relative rounded-md shadow-sm">
+          <input type="number" id="reticulocytes1000" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+        </div>
       </div>
 
-      <button type="button" onclick="calcularReticulocitos()" class="bg-green-500 text-white py-2 px-4 rounded cursor-pointer">Calcular</button>
+      <div class="mb-4">
+        <label for="reticulocytePercent" class="block text-sm font-medium text-gray-700">Reticulocyte Percentage (%):</label>
+        <div class="mt-1 relative rounded-md shadow-sm">
+          <input type="number" step="0.1" id="reticulocytePercent" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+        </div>
+      </div>
+
+      <button type="button" id="calcButton" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+        Calculate
+      </button>
     </form>
 
-    <div id="resultado" class="bg-white p-2">
-        <h3 class='text-lg font-semibold mb-2'>Resultado:</h3>
+    <!-- Updated Reference Values -->
+    <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+      <h3 class="text-lg font-semibold mb-2 text-blue-700">Reference Values:</h3>
+      <table class="min-w-full text-sm">
+        <thead>
+          <tr>
+            <th class="text-left">Patient Type</th>
+            <th class="text-left">Absolute</th>
+            <th class="text-left">Percentage</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-blue-100">
+          <tr>
+            <td class="py-1 font-medium">Newborn</td>
+            <td class="py-1">100,000 - 300,000/μL</td>
+            <td class="py-1">2.00 - 6.00%</td>
+          </tr>
+          <tr>
+            <td class="py-1 font-medium">Adult Male</td>
+            <td class="py-1">18,800 - 100,860/μL</td>
+            <td class="py-1">0.42 - 2.23%</td>
+          </tr>
+          <tr>
+            <td class="py-1 font-medium">Adult Female</td>
+            <td class="py-1">23,000 - 93,500/μL</td>
+            <td class="py-1">0.51 - 2.17%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="results" class="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200 hidden">
+      <h3 class='text-lg font-semibold mb-2 text-blue-600'>Results:</h3>
+      <div id="resultsContent" class="space-y-2"></div>
+    </div>
+
+    <div class="mt-6 text-center text-xs text-gray-500">
+      <p>© 2025 Leonardo Meireles</p>
     </div>
   </div>
+
+  <script src="script.js"></script>
 </body>
-<script src="script.js"></script>
 </html>
